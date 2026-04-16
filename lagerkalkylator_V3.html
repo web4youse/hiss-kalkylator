@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BF Räknare</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    padding: 2rem 1.5rem;
+    width: 100%;
+    max-width: 440px;
+  }
+  h1 { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 0.3rem; }
+  .subtitle { font-size: 13px; color: #999; margin-bottom: 1.5rem; }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #aaa;
+    margin-bottom: 10px;
+    margin-top: 1.25rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 0.5rem;
+  }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  .field input, .field select {
+    width: 100%;
+    padding: 11px 13px;
+    font-size: 17px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    outline: none;
+    color: #111;
+    background: #fafafa;
+    -webkit-appearance: none;
+  }
+  .field input:focus, .field select:focus {
+    border-color: #555;
+    background: #fff;
+  }
+  .field.full { grid-column: span 2; }
+
+  .lada-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
+  }
+  .lada-row .field { flex: 1; }
+  .lada-row .field input { font-size: 17px; }
+
+  button.rakna {
+    width: 100%;
+    padding: 14px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+    background: #222;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-bottom: 1.25rem;
+  }
+  button.rakna:active { opacity: 0.85; transform: scale(0.98); }
+
+  .result {
+    display: none;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .result.zero { background: #f0f0f0; }
+  .result.positive { background: #e8f7f0; }
+
+  .result-label { font-size: 14px; color: #666; margin-bottom: 4px; }
+  .result-lador {
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+  .result.zero .result-lador { color: #bbb; }
+  .result.positive .result-lador { color: #0f8c5a; }
+
+  .result-Artiklar {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 4px;
+  }
+  .result-formula { font-size: 12px; color: #aaa; margin-top: 6px; }
+
+  .reset-wrap { text-align: center; margin-top: 10px; }
+  .reset-btn {
+    background: transparent;
+    border: none;
+    color: #bbb;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 4px 0;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>BF Räknare</h1>
+  <p class="subtitle">Räknar ut hur många artiklar du ska hissa</p>
+
+  <div class="section-label">Lagervärden</div>
+  <div class="grid">
+    <div class="field">
+      <label for="saldo">Saldo</label>
+      <input type="number" id="saldo" placeholder="0" inputmode="numeric" min="0">
+    </div>
+    <div class="field">
+      <label for="assq">ASSQ</label>
+      <input type="number" id="assq" placeholder="0" inputmode="numeric" min="0">
+    </div>
+    <div class="field">
+      <label for="lager">Lager ( )</label>
+      <input type="number" id="lager" placeholder="0" inputmode="numeric" min="0">
+    </div>
+    <div class="field">
+      <label for="flex">Flex</label>
+      <input type="number" id="flex" placeholder="0" inputmode="numeric" min="0">
+    </div>
+  </div>
+
+  <div class="section-label">Lådstorlek</div>
+  <div class="grid" style="margin-bottom:1.5rem;">
+    <div class="field">
+      <label for="per-lada">Antal per låda</label>
+      <input type="number" id="per-lada" placeholder="t.ex. 20" inputmode="numeric" min="1">
+    </div>
+    <div class="field">
+      <label for="snabb">Snabbval</label>
+      <select id="snabb" onchange="valjSnabb()">
+        <option value="">– välj –</option>
+        <option value="6">6 st</option>
+        <option value="10">10 st</option>
+        <option value="12">12 st</option>
+        <option value="15">15 st</option>
+        <option value="20">20 st</option>
+        <option value="24">24 st</option>
+        <option value="30">30 st</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="rakna" onclick="rakna()">Räkna</button>
+
+  <div class="result" id="result">
+    <div class="result-label">Du ska hissa</div>
+    <div class="result-lador" id="result-lador">0 lådor</div>
+    <div class="result-Artiklar" id="result-Artiklar"></div>
+    <div class="result-formula" id="result-formula"></div>
+  </div>
+
+  <div class="reset-wrap">
+    <button class="reset-btn" onclick="nollstall()">Nollställ</button>
+  </div>
+</div>
+
+<script>
+  function hämta(id) { return parseFloat(document.getElementById(id).value) || 0; }
+
+  function valjSnabb() {
+    const val = document.getElementById('snabb').value;
+    if (val) document.getElementById('per-lada').value = val;
+  }
+
+  function rakna() {
+    const s = hämta('saldo'), a = hämta('assq'), l = hämta('lager'), f = hämta('flex');
+    const perLada = hämta('per-lada');
+    const res = s - a - l - f;
+    const box = document.getElementById('result');
+    const ladorEl = document.getElementById('result-lador');
+    const prodEl = document.getElementById('result-Artiklar');
+    const formEl = document.getElementById('result-formula');
+
+    box.style.display = 'block';
+
+    if (res <= 0) {
+      box.className = 'result zero';
+      ladorEl.textContent = '0 lådor';
+      prodEl.textContent = 'Inget att hissa just nu.';
+      formEl.textContent = s + ' − ' + a + ' − ' + l + ' − ' + f + ' = ' + Math.round(res);
+    } else {
+      box.className = 'result positive';
+      if (perLada > 0) {
+        const antal = Math.floor(res / perLada);
+        const ladaText = antal === 1 ? '1 låda' : antal + ' lådor';
+        ladorEl.textContent = ladaText;
+        prodEl.textContent = '(' + Math.round(res) + ' Artiklar, ' + perLada + ' st/låda)';
+      } else {
+        ladorEl.textContent = Math.round(res) + ' Artiklar';
+        prodEl.textContent = 'Ange antal per låda för att se lådor';
+      }
+      formEl.textContent = s + ' − ' + a + ' − ' + l + ' − ' + f + ' = ' + Math.round(res);
+    }
+  }
+
+  function nollstall() {
+    ['saldo','assq','lager','flex','per-lada'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('snabb').value = '';
+    document.getElementById('result').style.display = 'none';
+    document.getElementById('saldo').focus();
+  }
+
+  document.querySelectorAll('input').forEach(el => {
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') rakna(); });
+  });
+</script>
+</body>
+</html>
