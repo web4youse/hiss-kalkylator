@@ -8,61 +8,89 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #f5f5f5;
+    background: #d6dde6;
     min-height: 100vh;
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding: 2rem 1rem;
+    padding: 0;
   }
   .card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-    padding: 2rem 1.5rem;
+    background: #eef1f5;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
     width: 100%;
     max-width: 440px;
+    min-height: 100vh;
   }
-  h1 { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 0.3rem; }
-  .subtitle { font-size: 13px; color: #999; margin-bottom: 1.5rem; }
+  .topbar {
+    background: #2e4a6b;
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .topbar-title {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    background: #2e4a6b;
+    padding: 8px 16px 12px;
+  }
+  .inner { padding: 1rem 1rem 2rem; }
+
+  h1 { font-size: 18px; font-weight: 600; color: #222; margin-bottom: 0.2rem; }
+  .subtitle { font-size: 13px; color: #888; margin-bottom: 1.25rem; }
 
   .section-label {
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #aaa;
-    margin-bottom: 10px;
-    margin-top: 1.25rem;
+    color: #888;
+    margin-bottom: 8px;
+    margin-top: 1.1rem;
   }
   .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
     margin-bottom: 0.5rem;
   }
   .field label {
     display: block;
     font-size: 13px;
     font-weight: 500;
-    color: #555;
-    margin-bottom: 5px;
+    color: #444;
+    margin-bottom: 4px;
   }
   .field input, .field select {
     width: 100%;
-    padding: 11px 13px;
+    padding: 10px 12px;
     font-size: 17px;
-    border: 1.5px solid #e0e0e0;
-    border-radius: 10px;
+    border: 1px solid #b0bcc8;
+    border-radius: 6px;
     outline: none;
     color: #111;
-    background: #fafafa;
+    background: #fff;
     -webkit-appearance: none;
   }
   .field input:focus, .field select:focus {
-    border-color: #555;
+    border-color: #2e6da4;
     background: #fff;
   }
+  /* Yellow highlight for Saldo like in the app */
+  #saldo { background: #fff59d; border-color: #e0c000; font-weight: 700; }
+  #saldo:focus { background: #fffde0; }
+  /* Green highlight for ASSQ like in the app */
+  #assq { background: #b6f0b6; border-color: #3a9a3a; font-weight: 700; color: #1a5c1a; }
+  #assq:focus { background: #d0f7d0; }
+
   .field.full { grid-column: span 2; }
 
   .lada-row {
@@ -72,53 +100,55 @@
     margin-bottom: 1.5rem;
   }
   .lada-row .field { flex: 1; }
-  .lada-row .field input { font-size: 17px; }
 
   button.rakna {
     width: 100%;
-    padding: 14px;
-    font-size: 17px;
+    padding: 13px;
+    font-size: 16px;
     font-weight: 600;
     color: #fff;
-    background: #222;
+    background: #2e6da4;
     border: none;
-    border-radius: 12px;
+    border-radius: 6px;
     cursor: pointer;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.1rem;
+    letter-spacing: 0.01em;
   }
   button.rakna:active { opacity: 0.85; transform: scale(0.98); }
 
   .result {
     display: none;
-    border-radius: 12px;
-    padding: 1.5rem;
+    border-radius: 8px;
+    padding: 1.25rem;
     text-align: center;
+    border: 1px solid #b0bcc8;
   }
-  .result.zero { background: #f0f0f0; }
-  .result.positive { background: #e8f7f0; }
+  .result.zero { background: #e8eaed; }
+  .result.positive { background: #b6f0b6; border-color: #3a9a3a; }
 
-  .result-label { font-size: 14px; color: #666; margin-bottom: 4px; }
+  .result-label { font-size: 14px; color: #444; margin-bottom: 4px; }
   .result-lador {
-    font-size: 44px;
+    font-size: 42px;
     font-weight: 700;
     line-height: 1.1;
     margin-bottom: 4px;
   }
-  .result.zero .result-lador { color: #bbb; }
-  .result.positive .result-lador { color: #0f8c5a; }
+  .result.zero .result-lador { color: #999; }
+  .result.positive .result-lador { color: #1a5c1a; }
 
-  .result-Artiklar {
+  .result-produkter {
     font-size: 14px;
-    color: #777;
+    color: #2a6a2a;
     margin-bottom: 4px;
   }
-  .result-formula { font-size: 12px; color: #aaa; margin-top: 6px; }
+  .result.zero .result-produkter { color: #888; }
+  .result-formula { font-size: 12px; color: #888; margin-top: 6px; }
 
   .reset-wrap { text-align: center; margin-top: 10px; }
   .reset-btn {
     background: transparent;
     border: none;
-    color: #bbb;
+    color: #888;
     font-size: 13px;
     cursor: pointer;
     text-decoration: underline;
@@ -128,7 +158,8 @@
 </head>
 <body>
 <div class="card">
-  <h1>BF Räknare</h1>
+  <div class="topbar-title">BF Räknare</div>
+  <div class="inner">
   <p class="subtitle">Räknar ut hur många artiklar du ska hissa</p>
 
   <div class="section-label">Lagervärden</div>
@@ -177,13 +208,14 @@
   <div class="result" id="result">
     <div class="result-label">Du ska hissa</div>
     <div class="result-lador" id="result-lador">0 lådor</div>
-    <div class="result-Artiklar" id="result-Artiklar"></div>
+    <div class="result-produkter" id="result-produkter"></div>
     <div class="result-formula" id="result-formula"></div>
   </div>
 
   <div class="reset-wrap">
     <button class="reset-btn" onclick="nollstall()">Nollställ</button>
   </div>
+  </div><!-- /inner -->
 </div>
 
 <script>
@@ -200,7 +232,7 @@
     const res = s - a - l - f;
     const box = document.getElementById('result');
     const ladorEl = document.getElementById('result-lador');
-    const prodEl = document.getElementById('result-Artiklar');
+    const prodEl = document.getElementById('result-produkter');
     const formEl = document.getElementById('result-formula');
 
     box.style.display = 'block';
@@ -216,9 +248,9 @@
         const antal = Math.floor(res / perLada);
         const ladaText = antal === 1 ? '1 låda' : antal + ' lådor';
         ladorEl.textContent = ladaText;
-        prodEl.textContent = '(' + Math.round(res) + ' Artiklar, ' + perLada + ' st/låda)';
+        prodEl.textContent = '(' + Math.round(res) + ' artiklar, ' + perLada + ' st/låda)';
       } else {
-        ladorEl.textContent = Math.round(res) + ' Artiklar';
+        ladorEl.textContent = Math.round(res) + ' artiklar';
         prodEl.textContent = 'Ange antal per låda för att se lådor';
       }
       formEl.textContent = s + ' − ' + a + ' − ' + l + ' − ' + f + ' = ' + Math.round(res);
